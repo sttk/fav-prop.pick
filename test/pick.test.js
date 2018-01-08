@@ -179,4 +179,31 @@ describe('fav.prop.pick', function() {
     }
     expect(pick(src, keys)).to.deep.equal(src);
   });
+
+  it('Should not throw an error when 2nd arg contains a Symbol array',
+  function() {
+    if (typeof Symbol !== 'function') {
+      this.skip();
+      return;
+    }
+
+    var a = Symbol('a'), b = Symbol('b'), c = Symbol('c');
+    var obj = {};
+    obj[a] = 123;
+    obj[b] = 456;
+    obj[c] = 789;
+
+    expect(Object.getOwnPropertySymbols(pick(obj, [[a]]))).to.has.members([]);
+    expect(Object.getOwnPropertySymbols(pick(obj, [[a]]))).to.has.members([]);
+
+    var props = [];
+    for (var i = 0; i < 110; i++) {
+      props.push(String(i));
+    }
+    props[40] = a;
+    props[50] = [b];
+    props[60] = c;
+    expect(Object.getOwnPropertySymbols(pick(obj, props))).to.has.members(
+      [a, c]);
+  });
 });

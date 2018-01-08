@@ -25,8 +25,13 @@ function pick(src, pickedProps) {
   src = assign({}, src);
   for (var j = 0, nj = pickedProps.length; j < nj; j++) {
     var picked = pickedProps[j];
-    if (picked in src) {
-      dest[picked] = src[picked];
+    try {
+      if (picked in src) {
+        dest[picked] = src[picked];
+      }
+    } catch (e) {
+      // If `picked` is an array of Symbol, (picked in src) or src[picked]
+      // throws an error, but this function suppresses it.
     }
   }
   return dest;
