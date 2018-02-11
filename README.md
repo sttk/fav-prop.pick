@@ -43,6 +43,9 @@ pick({ a: 1, b: 2, c: 3 }, ['b']); // => { b: 2 }
 
 Creates a new plain object and copies enumerable own properties (keys and symbols) of *src* object, and the copied properties are only included in *pickedProps*.
 
+***NOTE:*** *All versions of Node.js allows to use a string array for getting or setting property, like `obj[['a','b']] == obj['a,b']`. An Symbol array is allowed as same until v4, but is not allowed on v5 and later (TypeError is thrown).
+To support same behaviors for all versions, this function does not allow to use an array as a property.*
+
 **Parameters:**
 
 | Parameter      |  Type  | Description                                |
