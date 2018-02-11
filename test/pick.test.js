@@ -157,7 +157,7 @@ describe('fav.prop.pick', function() {
     expect(pick(src, 0)).to.deep.equal({});
     expect(pick(src, 123)).to.deep.equal({});
     expect(pick(src, '')).to.deep.equal({});
-    expect(pick(src, 'ABC')).to.deep.equal({});
+    expect(pick(src, 'a')).to.deep.equal({});
     expect(pick(src, {})).to.deep.equal({});
     expect(pick(src, { a: 'b' })).to.deep.equal({});
     expect(pick(src, function() {})).to.deep.equal({});
@@ -205,5 +205,29 @@ describe('fav.prop.pick', function() {
     props[60] = c;
     expect(Object.getOwnPropertySymbols(pick(obj, props))).to.has.members(
       [a, c]);
+  });
+
+  it('Should not allow to use an array as a property', function() {
+    var obj = {};
+    obj.a = 123;
+    obj['b,c'] = 456;
+    expect(obj['a']).to.equal(123);
+    expect(obj['b,c']).to.equal(456);
+    expect(obj[['a']]).to.equal(123);
+    expect(obj[['b','c']]).to.equal(456);
+    expect(obj['b,c']).to.equal(456);
+
+    var ret1 = { a: 123 };
+    var ret2 = {};
+    ret2['b,c'] = 456;
+    expect(pick(obj, ['a'])).to.deep.equal(ret1);
+    expect(pick(obj, ['b,c'])).to.deep.equal(ret2);
+    expect(pick(obj, [['a']])).to.deep.equal({});
+    expect(pick(obj, [['b'],['c']])).to.deep.equal({});
+
+    expect(pick(obj, ['a', 'b,c'])).to.deep.equal(obj);
+    expect(pick(obj, [['a'], 'b,c'])).to.deep.equal(ret2);
+    expect(pick(obj, ['a', ['b','c']])).to.deep.equal(ret1);
+    expect(pick(obj, [['a'], ['b','c']])).to.deep.equal({});
   });
 });
