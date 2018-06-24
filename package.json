@@ -1,6 +1,6 @@
 {
   "name": "@fav/prop.pick",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Creates a plain object and copys properties of a source object only specified",
   "main": "index.js",
   "files": [
